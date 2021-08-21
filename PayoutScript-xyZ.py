@@ -6,8 +6,6 @@ import json, math, os, sys, time
 import slp_utils
 
 RONIN_ADDRESS_PREFIX = "ronin:"
-FEE_PAYOUT_PERCENTAGE = 0.01
-FEE_PAYOUT_ADDRESS = Web3.toChecksumAddress("0xa0caa7803205026ec08818664c4211aff7565f56")
 
 # Data types
 Transaction = namedtuple("Transaction", "from_address to_address amount")
@@ -75,10 +73,10 @@ for scholar in accounts["Scholars"]:
       new_line_needed = False
       log()
     log(f"Account '{scholarName}' (nonce: {nonce}) has {slp_unclaimed_balance} unclaimed SLP.")
-    
+
     slp_claims.append(SlpClaim(
       name = scholarName,
-      address = account_address, 
+      address = account_address,
       private_key = scholar["PrivateKey"],
       slp_claimed_balance = slp_utils.get_claimed_slp(account_address),
       slp_unclaimed_balance = slp_unclaimed_balance,
@@ -113,7 +111,7 @@ while (len(slp_claims) > 0):
         print(slp_claim.slp_unclaimed_balance)
         if (slp_total_balance >= slp_claim.slp_claimed_balance + slp_claim.slp_unclaimed_balance):
           completed_claims.append(slp_claim)
-  
+
     for completed_claim in completed_claims:
       slp_claims.remove(completed_claim)
 
@@ -143,7 +141,7 @@ for scholar in accounts["Scholars"]:
   if (slp_balance == 0):
     log(f"Skipping account '{scholarName}' ({formatRoninAddress(account_address)}) because SLP balance is zero.")
     continue
-  
+
   scholar_payout_percentage = scholar["ScholarPayoutPercentage"]
   assert(scholar_payout_percentage >= 0 and scholar_payout_percentage <= 1)
 
@@ -151,19 +149,18 @@ for scholar in accounts["Scholars"]:
   slp_balance_minus_fees = slp_balance - fee_payout_amount
   scholar_payout_amount = math.ceil(slp_balance_minus_fees * scholar_payout_percentage)
   academy_payout_amount = slp_balance_minus_fees - scholar_payout_amount
-  
+
   assert(scholar_payout_amount >= 0)
   assert(academy_payout_amount >= 0)
   assert(slp_balance == scholar_payout_amount + academy_payout_amount + fee_payout_amount)
-  
+
   payouts.append(Payout(
     name = scholarName,
     private_key = scholar["PrivateKey"],
     slp_balance = slp_balance,
     nonce = nonces[account_address],
     scholar_transaction = Transaction(from_address = account_address, to_address = scholar_payout_address, amount = scholar_payout_amount),
-    academy_transaction = Transaction(from_address = account_address, to_address = academy_payout_address, amount = academy_payout_amount),
-    fee_transaction = Transaction(from_address = account_address, to_address = FEE_PAYOUT_ADDRESS, amount = fee_payout_amount)))
+    academy_transaction = Transaction(from_address = account_address, to_address = academy_payout_address, amount = academy_payout_amount)))
 
 log()
 
@@ -200,11 +197,6 @@ for payout in payouts:
   hash = slp_utils.transfer_slp(payout.academy_transaction, payout.private_key, payout.nonce + 1)
   time.sleep(0.250)
   log("DONE")
-  log(f"│  Hash: {hash} - Explorer: https://explorer.roninchain.com/tx/{str(hash)}")
+  log(f"└─  Hash: {hash} - Explorer: https://explorer.roninchain.com/tx/{str(hash)}")
 
-  log(f"└─ Fee payout: sending {payout.fee_transaction.amount} SLP from {formatRoninAddress(payout.fee_transaction.from_address)} to {formatRoninAddress(payout.fee_transaction.to_address)}...", end="")
-  hash = slp_utils.transfer_slp(payout.fee_transaction, payout.private_key, payout.nonce + 2)
-  time.sleep(0.250)
-  log("DONE")
-  log(f"   Hash: {hash} - Explorer: https://explorer.roninchain.com/tx/{str(hash)}")
   log()
