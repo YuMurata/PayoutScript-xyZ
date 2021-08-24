@@ -8,11 +8,9 @@ class InputFrame(tk.Frame):
     def __init__(self, master):
         super().__init__(master)
 
-        academy_info = PayoutInfo().academy_info
-        self.academy_var_dict = {key: tk.StringVar(self)
-                                 for key in academy_info._asdict().keys()}
-
-        self.load_payout()
+        academy = PayoutInfo().academy
+        self.academy_var_dict = {key: tk.StringVar(self, value=value)
+                                 for key, value in academy._asdict().items()}
 
         for key in self.academy_var_dict.keys():
             frame = tk.Frame(self)
@@ -28,12 +26,6 @@ class InputFrame(tk.Frame):
     def to_info_dict(self):
         return {key: self.academy_var_dict[key].get()
                 for key in self.academy_var_dict.keys()}
-
-    def load_payout(self):
-        academy_info = PayoutInfo().academy_info
-
-        for key, value in academy_info._asdict().items():
-            self.academy_var_dict[key].set(value)
 
 
 class ControlFrame(tk.Frame):

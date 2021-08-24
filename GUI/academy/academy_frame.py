@@ -21,9 +21,9 @@ class AcademyFrame(tk.Frame):
         edit_button.bind('<Button-1>', lambda e: open_edit_window())
 
     def create_tree(self) -> ttk.Treeview:
-        academy_info = PayoutInfo().academy_info
+        academy = PayoutInfo().academy
 
-        columns = tuple(academy_info._asdict().keys())
+        columns = tuple(academy._asdict().keys())
         print(columns)
         column_widths = (100, 150, 150)
         tree = ttk.Treeview(self, columns=columns, show='headings')
@@ -32,11 +32,11 @@ class AcademyFrame(tk.Frame):
             tree.column(key, width=width)
             tree.heading(key, text=key)
 
-        tree.insert("", "end", "academy", values=academy_info)
+        tree.insert("", "end", "academy", values=academy)
 
         return tree
 
     def load_payout(self):
-        academy_info = PayoutInfo().academy_info
-        self.tree.item("academy", value=academy_info)
+        academy = PayoutInfo().academy
+        self.tree.item("academy", value=academy)
         print('load')

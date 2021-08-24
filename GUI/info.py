@@ -40,13 +40,14 @@ class PayoutInfo:
         with open(self._payout_path) as f:
             payout_dict = json.load(f)
 
-        self.academy_info = AcademyInfo.load(payout_dict["Academy"])
-        self.scholar_list = [ScholarInfo.load(scholar_dict)
-                             for scholar_dict in payout_dict['Scholars']]
+        self.academy = AcademyInfo.load(payout_dict["Academy"])
+        self.scholar_list = \
+            tuple([ScholarInfo.load(scholar_dict)
+                   for scholar_dict in payout_dict['Scholars']])
 
     def to_dict(self):
         return {
-            "Academy": self.academy_info._asdict(),
+            "Academy": self.academy._asdict(),
             "Scholars": [scholar._asdict() for scholar in self.scholar_list]
         }
 
