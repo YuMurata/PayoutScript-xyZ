@@ -9,10 +9,10 @@ class AcademyFrame(tk.Frame):
         super().__init__(master)
 
         self.tree = self.create_tree()
-        self.tree.pack()
+        self.tree.pack(padx=10, pady=10)
 
         edit_button = ttk.Button(self, text='edit')
-        edit_button.pack()
+        edit_button.pack(padx=10, pady=10)
 
         def open_edit_window():
             window = EditWindow(self)
