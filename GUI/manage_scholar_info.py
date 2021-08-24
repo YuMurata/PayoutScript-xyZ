@@ -1,12 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from academy.academy_frame import AcademyFrame
-
-
-class ScholarFrame(ttk.Frame):
-    def __init__(self, master):
-        super().__init__(master)
-        ttk.Label(self, text="scholar").pack()
+from scholars.scholars_frame import ScholarsFrame
 
 
 class MainFrame(ttk.Frame):
@@ -17,7 +12,7 @@ class MainFrame(ttk.Frame):
         academy_frame = AcademyFrame(note)
         note.add(academy_frame, text='Academy')
 
-        scholar_frame = ScholarFrame(note)
+        scholar_frame = ScholarsFrame(note)
         note.add(scholar_frame, text='Scholars')
 
         note.pack()
