@@ -15,7 +15,7 @@ class InputFrame(tk.Frame):
         for key in self.scholar_var_dict.keys():
             frame = tk.Frame(self)
 
-            ttk.Label(frame, text=key, width=20,
+            ttk.Label(frame, text=key, width=30,
                       ).pack(side=tk.LEFT)
 
             academy_var = self.scholar_var_dict[key]
