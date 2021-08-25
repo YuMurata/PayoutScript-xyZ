@@ -4,6 +4,7 @@ from tkinter import messagebox
 from typing import Callable, Tuple
 from info import PayoutInfo, ScholarInfo
 from .edit_frame import EditWindow
+from .add_frame import AddWindow
 
 
 class ButtonFrame(tk.Frame):
@@ -13,6 +14,8 @@ class ButtonFrame(tk.Frame):
         self.edit_button = ttk.Button(self, text='edit')
         self.edit_button.pack(side=tk.LEFT)
 
+        self.add_button = ttk.Button(self, text='add')
+        self.add_button.pack(side=tk.LEFT)
 
 
     def bind_edit_button(self, selection_func: Callable[[], Tuple[str]],
@@ -28,6 +31,13 @@ class ButtonFrame(tk.Frame):
             window.bind_func(load_payout_func)
 
         self.edit_button.bind('<Button-1>', lambda e: open_window())
+
+    def bind_add_button(self, load_payout_func: Callable[[], None]):
+        def open_window():
+            window = AddWindow(self)
+            window.bind_func(load_payout_func)
+
+        self.add_button.bind('<Button-1>', lambda e: open_window())
 class ScholarsFrame(tk.Frame):
     def __init__(self, master):
         super().__init__(master)
@@ -40,6 +50,7 @@ class ScholarsFrame(tk.Frame):
 
         button_frame = ButtonFrame(self)
         button_frame.bind_edit_button(self.tree.selection, self.load_payout)
+        button_frame.bind_add_button(self.load_payout)
         button_frame.pack(padx=10, pady=10)
 
     def create_tree(self) -> ttk.Treeview:

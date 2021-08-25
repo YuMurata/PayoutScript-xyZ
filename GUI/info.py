@@ -66,3 +66,9 @@ class PayoutInfo:
         payout_dict["Scholars"][index] = scholar_dict
 
         self._write_payout(payout_dict)
+
+    def add_scholar(self, scholar_dict: dict):
+        payout_dict = self.to_dict()
+        payout_dict["Scholars"].append(scholar_dict)
+
+        self._write_payout(payout_dict)
