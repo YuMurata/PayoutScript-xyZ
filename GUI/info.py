@@ -72,3 +72,9 @@ class PayoutInfo:
         payout_dict["Scholars"].append(scholar_dict)
 
         self._write_payout(payout_dict)
+
+    def delete_scholar(self, index: int):
+        payout_dict = self.to_dict()
+        payout_dict["Scholars"].pop(index)
+
+        self._write_payout(payout_dict)
