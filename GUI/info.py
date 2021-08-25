@@ -51,16 +51,18 @@ class PayoutInfo:
             "Scholars": [scholar._asdict() for scholar in self.scholar_list]
         }
 
+    def _write_payout(self, payout_dict: dict):
+        with open(self._payout_path, 'w') as f:
+            json.dump(payout_dict, f, indent=2)
+
     def rewrite_academy(self, academy_dict: dict):
         payout_dict = self.to_dict()
         payout_dict["Academy"] = academy_dict
 
-        with open(self._payout_path, 'w') as f:
-            json.dump(payout_dict, f, indent=2)
+        self._write_payout(payout_dict)
 
     def rewrite_scholar(self, scholar_dict: dict, index: int):
         payout_dict = self.to_dict()
         payout_dict["Scholars"][index] = scholar_dict
 
-        with open(self._payout_path, 'w') as f:
-            json.dump(payout_dict, f, indent=2)
+        self._write_payout(payout_dict)
